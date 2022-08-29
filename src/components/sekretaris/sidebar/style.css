@@ -1,0 +1,12 @@
+/** @format */
+.font-face-jd {
+  font-family: "Judson";
+}
+.font-face-jost {
+  font-family: "Judson";
+}
+.active {
+  color: #0277fa;
+  border-left: #0277fa solid 5px;
+  padding-left: 16px;
+}
