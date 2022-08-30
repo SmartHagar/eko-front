@@ -8,8 +8,8 @@ const { crud } = GetCrud();
 
 const useJabatan = create(
   devtools((set, get) => ({
-    jabatan: [],
-    setJabatan: async (search = "", page = "1", limit = 10) => {
+    responses: {},
+    setJabatan: async (search = "", page = "2", limit) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
         const response = await crud({
@@ -22,7 +22,7 @@ const useJabatan = create(
             page,
           },
         });
-        set((state) => ({ ...state, jabatan: response.data.data }));
+        set((state) => ({ ...state, responses: response.data }));
         return {
           status: "berhasil",
           data: response.data,
@@ -65,6 +65,38 @@ const useJabatan = create(
         });
         set((state) => ({
           jabatan: state.jabatan.filter((item) => item.id !== id),
+        }));
+        return {
+          status: "berhasil",
+          data: response.data,
+        };
+      } catch (error) {
+        return {
+          status: "error",
+          error: error.response.data,
+        };
+      }
+    },
+    updateItem: async (id, name) => {
+      const getToken = JSON.parse(localStorage.getItem("token"));
+      try {
+        const response = await crud({
+          method: "put",
+          url: `/position/${id}`,
+          headers: { Authorization: `Bearer ${getToken}` },
+          data: { name },
+        });
+        set((state) => ({
+          jabatan: state.jabatan.map((item) => {
+            if (item.id === id) {
+              return {
+                ...item,
+                name,
+              };
+            } else {
+              return item;
+            }
+          }),
         }));
         return {
           status: "berhasil",

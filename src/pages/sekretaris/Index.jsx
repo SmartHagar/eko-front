@@ -4,6 +4,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import SideBar from "../../components/sekretaris/sidebar/SideBar";
 import "./style.css";
+import "react-notifications/lib/notifications.css";
 
 const Index = () => {
   return (

@@ -1,19 +1,37 @@
 /** @format */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useJabatan from "../../../store/jabatan";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
 
-const From = ({ closeModal }) => {
-  const { addJabatan } = useJabatan();
+const From = ({ closeModal, dataEdit, cekEdit }) => {
+  const { addJabatan, updateItem } = useJabatan();
   const [name, setName] = useState("");
+
+  useEffect(() => {
+    if (cekEdit) {
+      return setName(dataEdit.name);
+    }
+    setName("");
+  }, []);
+
   const handleClose = () => {
     closeModal(false);
   };
 
   const handleSimpan = async (e) => {
     e.preventDefault();
-    const { status } = await addJabatan(name);
-    if (status === "berhasil") {
+    let cek;
+    if (cekEdit) {
+      cek = await updateItem(dataEdit.id, name);
+      closeModal(false);
+    } else {
+      cek = await addJabatan(name);
+    }
+    if (cek.status === "berhasil") {
       setName("");
     }
   };
@@ -64,7 +82,7 @@ const From = ({ closeModal }) => {
                     onChange={(e) => {
                       setName(e.target.value);
                     }}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     required
                   />
                 </div>
