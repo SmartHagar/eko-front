@@ -2,10 +2,15 @@
 
 import { Sidebar } from "flowbite-react";
 import React, { useEffect } from "react";
+import { motion } from "framer-motion";
 
 const Dashboard = () => {
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <h1 className="text-2xl font-bold font-face-jd">Dashboard</h1>
       <h2 className="text-lg font-face-jd">Selamat Datang...</h2>
       <div className="mt-3">
@@ -30,7 +35,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

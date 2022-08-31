@@ -11,8 +11,6 @@ const Table = ({
   setEdit,
   setDelete,
 }) => {
-  const { data } = dataTable;
-
   const showNo = (index) => {
     let noUrut = (page - 1) * limit + index;
     return noUrut + 1;
@@ -32,8 +30,8 @@ const Table = ({
           </thead>
           <tbody>
             {/* loop tr */}
-            {data &&
-              data.map((row, index) => (
+            {dataTable &&
+              dataTable.map((row, index) => (
                 <tr
                   key={index}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"

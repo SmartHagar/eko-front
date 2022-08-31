@@ -15,6 +15,7 @@ import Pegawai from "../pages/sekretaris/pegawai/Pegawai";
 // Cek Login & Role
 import useRole from "../store/role";
 import NoMatch from "../pages/sekretaris/NoMatch";
+import { AnimatePresence } from "framer-motion";
 
 const MyRouters = () => {
   const navigate = useNavigate();
@@ -42,15 +43,17 @@ const MyRouters = () => {
   }, []);
 
   return (
-    <Routes>
-      <Route path="/" index element={<AuthLogin />} />
-      <Route path="sekretaris" element={<IndexSekretaris />}>
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="jabatan" element={<Jabatan />} />
-        <Route path="pegawai" element={<Pegawai />} />
-        <Route path="absensi" element={<Absensi />} />
-      </Route>
-    </Routes>
+    <AnimatePresence>
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" index element={<AuthLogin />} />
+        <Route path="sekretaris" element={<IndexSekretaris />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="jabatan" element={<Jabatan />} />
+          <Route path="pegawai" element={<Pegawai />} />
+          <Route path="absensi" element={<Absensi />} />
+        </Route>
+      </Routes>
+    </AnimatePresence>
   );
 };
 

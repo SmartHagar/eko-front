@@ -6,16 +6,16 @@ import { GetCrud } from "../services/base-url";
 
 const { crud } = GetCrud();
 
-const useJabatan = create(
+const usePegawai = create(
   devtools((set, get) => ({
     responses: {},
     arrData: [],
-    setJabatan: async (search = "", page = "2", limit) => {
+    setPegawai: async (search = "", page = "2", limit) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
         const response = await crud({
           method: "get",
-          url: `/position`,
+          url: `/employee`,
           headers: { Authorization: `Bearer ${getToken}` },
           params: {
             limit,
@@ -36,12 +36,12 @@ const useJabatan = create(
         };
       }
     },
-    addJabatan: async (name) => {
+    addPegawai: async (name) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
         const res = await crud({
           method: "post",
-          url: `/position`,
+          url: `/employee`,
           headers: { Authorization: `Bearer ${getToken}` },
           data: { name },
         });
@@ -59,12 +59,12 @@ const useJabatan = create(
         };
       }
     },
-    removeJabatan: async (id) => {
+    removePegawai: async (id) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
         const res = await crud({
           method: "delete",
-          url: `/position/${id}`,
+          url: `/employee/${id}`,
           headers: { Authorization: `Bearer ${getToken}` },
         });
         set((state) => ({
@@ -86,7 +86,7 @@ const useJabatan = create(
       try {
         const response = await crud({
           method: "put",
-          url: `/position/${id}`,
+          url: `/employee/${id}`,
           headers: { Authorization: `Bearer ${getToken}` },
           data: { name },
         });
@@ -116,4 +116,4 @@ const useJabatan = create(
   }))
 );
 
-export default useJabatan;
+export default usePegawai;
