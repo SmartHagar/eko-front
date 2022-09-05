@@ -87,7 +87,7 @@ const Jabatan = () => {
   };
 
   const headers = ["No", "Nama", "Aksi"];
-  const columns = ["name"];
+  const tableBodies = [`name`];
 
   return (
     <motion.div
@@ -137,7 +137,7 @@ const Jabatan = () => {
         <Table
           headers={headers}
           dataTable={arrData}
-          columns={columns}
+          tableBodies={tableBodies}
           setEdit={handleEdit}
           setDelete={handleDelete}
           page={page}

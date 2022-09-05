@@ -7,7 +7,7 @@ import SelectSearch from "../../../components/sekretaris/form/SelectSearch";
 import usePegawai from "../../../store/pegawai";
 import Input from "../../../components/sekretaris/form/Input";
 
-const From = ({ closeModal, dataEdit, cekEdit, setPesan, sendSave }) => {
+const From = ({ closeModal, dataEdit, cekEdit, setPesan }) => {
   const { arrData, setJabatan } = useJabatan();
   const { addPegawai, updatePegawai } = usePegawai();
   const [name, setName] = useState("");
@@ -62,7 +62,6 @@ const From = ({ closeModal, dataEdit, cekEdit, setPesan, sendSave }) => {
       console.log(cek);
     }
     if (cek.status === "berhasil") {
-      sendSave(cek.data);
       setName("");
     }
   };

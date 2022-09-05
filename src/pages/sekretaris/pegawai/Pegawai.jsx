@@ -5,13 +5,13 @@ import Swal from "sweetalert2";
 import Search from "../../../components/sekretaris/form/Search";
 import Paginate from "../../../components/sekretaris/paginate/Paginate";
 import Table from "../../../components/sekretaris/table/Table";
-import useJabatan from "../../../store/jabatan";
+import usePegawai from "../../../store/pegawai";
 import From from "./From";
 import { motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
 
 const Pegawai = () => {
-  const { arrData, responses, setJabatan, removeJabatan } = useJabatan();
+  const { arrData, responses, setPegawai, removePegawai } = usePegawai();
   const [openModal, setOpenModal] = useState(false);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -20,9 +20,14 @@ const Pegawai = () => {
   const [cekEdit, setCekEdit] = useState(true);
 
   useEffect(() => {
-    setJabatan("", page, limit);
+    setPegawai("", page, limit);
   }, [page, limit]);
 
+  // Panggil data setelah simpan atau edit data
+  const sendSave = () => {
+    setPegawai("", page, limit);
+  };
+  // Toas saat simpan atau edit
   const setPesan = (event) => {
     // if (event.judul === "Berhasil") {
     toast.success(event.pesan, {
@@ -48,17 +53,16 @@ const Pegawai = () => {
         "aria-live": "polite",
       },
     });
-    console.log("hallo");
     //   NotificationManager.success(event.pesan, event.judul);
     // }
   };
-
+  // Menampilkan form setelah tombol edit diclick
   const handleEdit = (item) => {
     setCekEdit(true);
     setDataEdit(item);
     setOpenModal(true);
   };
-
+  // Menampilkan alert setelah tombol hapus diclick
   const handleDelete = async (id) => {
     console.log(id);
     Swal.fire({
@@ -72,7 +76,7 @@ const Pegawai = () => {
       cancelButtonText: "Batal",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const { status } = await removeJabatan(id);
+        const { status } = await removePegawai(id);
         console.log(status);
         if (status !== "error") {
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
@@ -80,14 +84,14 @@ const Pegawai = () => {
       }
     });
   };
-
+  // Mencari data
   const handleSearch = (e) => {
     const search = e.target.value;
-    setJabatan(search, page, limit);
+    setPegawai(search, page, limit);
   };
 
-  const headers = ["No", "Nama", "Aksi"];
-  const columns = ["name"];
+  const headers = ["No", "NIP", "Nama", "Jabatan", "Jenis Kelamin", "Aksi"];
+  const tableBodies = [`NIP`, `name`, `position.name`, `gender`];
 
   return (
     <motion.div
@@ -98,10 +102,10 @@ const Pegawai = () => {
     >
       <Toaster />
       <header>
-        <h1 className="text-2xl font-bold">Halaman Jabatan</h1>
+        <h1 className="text-2xl font-bold">Halaman Pegawai</h1>
       </header>
       <div className="mt-3 flex justify-between flex-wrap">
-        <p>Silahkan menambah, merubah dan menghapus data jabatan</p>
+        <p>Silahkan menambah, merubah dan menghapus data Pegawai</p>
         <button
           onClick={() => {
             setOpenModal(true);
@@ -116,7 +120,7 @@ const Pegawai = () => {
 
       <div className="flex justify-between gap-3 flex-wrap md:flex-nowrap">
         <div className="w-full">
-          <Search ket="Cari Data Jabatan" findData={handleSearch} />
+          <Search ket="Cari Data Pegawai" findData={handleSearch} />
         </div>
         <div>
           <select
@@ -137,7 +141,7 @@ const Pegawai = () => {
         <Table
           headers={headers}
           dataTable={arrData}
-          columns={columns}
+          tableBodies={tableBodies}
           setEdit={handleEdit}
           setDelete={handleDelete}
           page={page}
@@ -149,14 +153,17 @@ const Pegawai = () => {
         <Paginate pageData={responses} setPage={setPage} />
       </div>
       {/* form*/}
-      {openModal && (
-        <From
-          closeModal={setOpenModal}
-          dataEdit={dataEdit}
-          cekEdit={cekEdit}
-          setPesan={setPesan}
-        />
-      )}
+      <div>
+        {openModal && (
+          <From
+            closeModal={setOpenModal}
+            dataEdit={dataEdit}
+            cekEdit={cekEdit}
+            setPesan={setPesan}
+            sendSave={sendSave}
+          />
+        )}
+      </div>
     </motion.div>
   );
 };

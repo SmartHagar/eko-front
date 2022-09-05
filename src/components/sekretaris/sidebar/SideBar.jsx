@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useLogin from "../../../store/login";
 import OutsideClick from "../../OutsideClick";
@@ -13,7 +13,7 @@ const SideBar = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   const heandelLogout = async () => {
-    const res = setLogout();
+    const res = await setLogout();
     if (res.status === "berhasil") {
       navigate("/");
     }
@@ -30,7 +30,9 @@ const SideBar = () => {
       <AnimatePresence>
         <motion.div
           layout
-          className={showMenu ? "flex w-52 z-20" : "hidden md:flex md:w-64"}
+          className={
+            showMenu ? "flex w-52 z-20" : "hidden md:flex md:w-64 z-20"
+          }
         >
           <aside className="">
             <div className="overflow-y-auto py-4 fixed w-52 md:w-64 top-0 bg-my-white shadow-lg rounded dark:bg-gray-800 h-screen">

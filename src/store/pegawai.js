@@ -10,7 +10,7 @@ const usePegawai = create(
   devtools((set, get) => ({
     responses: {},
     arrData: [],
-    setPegawai: async (search = "", page = "2", limit) => {
+    setPegawai: async (search = "", page = "1", limit) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
         const response = await crud({
@@ -36,14 +36,14 @@ const usePegawai = create(
         };
       }
     },
-    addPegawai: async (name) => {
+    addPegawai: async (item) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
         const res = await crud({
           method: "post",
           url: `/employee`,
           headers: { Authorization: `Bearer ${getToken}` },
-          data: { name },
+          data: item,
         });
         set((state) => ({
           arrData: [res.data.data, ...state.arrData],
@@ -81,21 +81,21 @@ const usePegawai = create(
         };
       }
     },
-    updateItem: async (id, name) => {
+    updatePegawai: async (id, row) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
         const response = await crud({
           method: "put",
           url: `/employee/${id}`,
           headers: { Authorization: `Bearer ${getToken}` },
-          data: { name },
+          data: row,
         });
         set((state) => ({
           arrData: state.arrData.map((item) => {
             if (item.id === id) {
               return {
                 ...item,
-                name,
+                ...row,
               };
             } else {
               return item;

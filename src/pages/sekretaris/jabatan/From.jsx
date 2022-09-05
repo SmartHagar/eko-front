@@ -1,9 +1,10 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
+import Input from "../../../components/sekretaris/form/Input";
 import useJabatan from "../../../store/jabatan";
 
-const From = ({ closeModal, dataEdit, cekEdit, setPesan, notif }) => {
+const From = ({ closeModal, dataEdit, cekEdit, setPesan }) => {
   const { addJabatan, updateItem } = useJabatan();
   const [name, setName] = useState("");
 
@@ -74,14 +75,13 @@ const From = ({ closeModal, dataEdit, cekEdit, setPesan, notif }) => {
                   >
                     Nama Jabatan
                   </label>
-                  <input
-                    type="text"
-                    id="name"
+                  <Input
                     value={name}
+                    id="name"
+                    placeholder="Jabatan"
                     onChange={(e) => {
                       setName(e.target.value);
                     }}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     required
                   />
                 </div>

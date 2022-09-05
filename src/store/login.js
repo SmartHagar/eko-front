@@ -26,17 +26,19 @@ const useLogin = create(
     setLogout: async () => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
-        const response = await auth.post(`/logout`, {
+        const res = await auth({
+          method: "post",
+          url: `/logout`,
           headers: { Authorization: `Bearer ${getToken}` },
         });
         localStorage.removeItem("token");
         localStorage.removeItem("role");
         return {
           status: "berhasil",
-          data: response.data,
+          data: res.data,
         };
       } catch (error) {
-        console.log(getToken);
+        console.log(error);
         return {
           status: "error",
           error: error.response.data,

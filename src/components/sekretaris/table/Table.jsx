@@ -1,11 +1,12 @@
 /** @format */
 
 import React from "react";
+import getProperty from "../../../services/getProperty";
 
 const Table = ({
   headers,
   dataTable,
-  columns,
+  tableBodies,
   page,
   limit,
   setEdit,
@@ -40,14 +41,16 @@ const Table = ({
                     {showNo(index)}
                   </td>
                   {/* loop td */}
-                  {columns.map((column, index) => (
-                    <td
-                      key={index}
-                      className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {row[column]}
-                    </td>
-                  ))}
+                  {tableBodies.map((column, index) => {
+                    return (
+                      <td
+                        key={index}
+                        className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        {getProperty(row, column)}
+                      </td>
+                    );
+                  })}
                   {/* aksi */}
                   <td>
                     <div className="mt-2">

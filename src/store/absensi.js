@@ -6,16 +6,16 @@ import { GetCrud } from "../services/base-url";
 
 const { crud } = GetCrud();
 
-const useJabatan = create(
+const useAbsensi = create(
   devtools((set, get) => ({
     responses: {},
     arrData: [],
-    setJabatan: async (search = "", page = "", limit = "") => {
+    setAbsensi: async (search = "", page = "1", limit) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
         const response = await crud({
           method: "get",
-          url: `/position`,
+          url: `/attedance`,
           headers: { Authorization: `Bearer ${getToken}` },
           params: {
             limit,
@@ -25,6 +25,7 @@ const useJabatan = create(
         });
         set((state) => ({ ...state, responses: response.data }));
         set((state) => ({ ...state, arrData: response.data.data }));
+        console.log(response.data.data);
         return {
           status: "berhasil",
           data: response.data,
@@ -36,14 +37,14 @@ const useJabatan = create(
         };
       }
     },
-    addJabatan: async (name) => {
+    addAbsensi: async (item) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
         const res = await crud({
           method: "post",
-          url: `/position`,
+          url: `/attedance`,
           headers: { Authorization: `Bearer ${getToken}` },
-          data: { name },
+          data: item,
         });
         set((state) => ({
           arrData: [res.data.data, ...state.arrData],
@@ -59,12 +60,12 @@ const useJabatan = create(
         };
       }
     },
-    removeJabatan: async (id) => {
+    removeAbsensi: async (id) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
         const res = await crud({
           method: "delete",
-          url: `/position/${id}`,
+          url: `/attedance/${id}`,
           headers: { Authorization: `Bearer ${getToken}` },
         });
         set((state) => ({
@@ -81,21 +82,21 @@ const useJabatan = create(
         };
       }
     },
-    updateItem: async (id, name) => {
+    updateAbsensi: async (id, row) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
         const response = await crud({
           method: "put",
-          url: `/position/${id}`,
+          url: `/attedance/${id}`,
           headers: { Authorization: `Bearer ${getToken}` },
-          data: { name },
+          data: row,
         });
         set((state) => ({
           arrData: state.arrData.map((item) => {
             if (item.id === id) {
               return {
                 ...item,
-                name,
+                ...row,
               };
             } else {
               return item;
@@ -116,4 +117,4 @@ const useJabatan = create(
   }))
 );
 
-export default useJabatan;
+export default useAbsensi;
