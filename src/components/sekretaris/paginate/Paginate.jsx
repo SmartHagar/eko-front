@@ -6,7 +6,6 @@ import Pagination from "react-js-pagination";
 const Paginate = ({ pageData, setPage, total }) => {
   const handlePageChange = (pageNumber) => {
     setPage(pageNumber);
-    console.log("heandel", pageNumber);
   };
 
   const setPaginate = () => {

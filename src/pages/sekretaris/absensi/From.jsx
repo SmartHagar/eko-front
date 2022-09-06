@@ -1,42 +1,41 @@
 /** @format */
 
-import React, { forwardRef, useEffect, useRef, useState } from "react";
-import useJabatan from "../../../store/jabatan";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
 import SelectSearch from "../../../components/sekretaris/form/SelectSearch";
 import usePegawai from "../../../store/pegawai";
-import Input from "../../../components/sekretaris/form/Input";
+import useAbsensi from "../../../store/absensi";
+import SelectComp from "../../../components/sekretaris/form/SelectComp";
+import DatePickComp from "../../../components/sekretaris/form/DatePickComp";
+import moment from "moment";
 
 const From = ({ closeModal, dataEdit, cekEdit, setPesan }) => {
-  const { arrData, setJabatan } = useJabatan();
-  const { addPegawai, updatePegawai } = usePegawai();
-  const [name, setName] = useState("");
-  const [NIP, setNIP] = useState("");
-  const [position_id, setPositionId] = useState("");
-  const [gender, setGender] = useState("Laki-laki");
+  const { arrData, setPegawai } = usePegawai();
+  const { addAbsensi, updateAbsensi } = useAbsensi();
+  const [date, setDate] = useState(new Date());
+  const [presence, setPresence] = useState("");
+  const [employee, setEmployee] = useState("");
 
   useEffect(() => {
-    setJabatan();
+    setPegawai();
+    setEmployee([]);
+    setPresence("Hadir");
     if (cekEdit) {
-      const { NIP, name, gender } = dataEdit;
+      const { date, presence } = dataEdit;
+      const myDate = new Date(date);
       // eslint-disable-next-line no-sequences
       return (
-        setNIP(NIP),
-        setName(name),
-        setPositionId({
-          value: dataEdit.position.id,
-          label: dataEdit.position.name,
-        }),
-        setGender(gender)
+        setDate(myDate),
+        setPresence(presence),
+        setEmployee({
+          value: dataEdit.employee.id,
+          label: dataEdit.employee.name,
+        })
       );
     }
-    console.log("tambah");
-    setPositionId([]);
-    setName("");
   }, []);
 
-  const options = arrData.map(function (jabatan) {
-    return { value: jabatan.id, label: jabatan.name };
+  const options = arrData.map(function (pegawai) {
+    return { value: pegawai.id, label: `${pegawai.NIP} - ${pegawai.name}` };
   });
 
   const handleClose = () => {
@@ -44,30 +43,30 @@ const From = ({ closeModal, dataEdit, cekEdit, setPesan }) => {
   };
 
   const handleSimpan = async (e) => {
+    const myDate = moment(date).format("YYYY-MM-DD");
     const item = {
-      NIP,
-      name,
-      position_id: position_id.value,
-      gender,
+      date: myDate,
+      presence,
+      employee_id: employee.value,
     };
     e.preventDefault();
     let cek;
     if (cekEdit) {
-      cek = await updatePegawai(dataEdit.id, item);
+      cek = await updateAbsensi(dataEdit.id, item);
       closeModal(false);
       setPesan(cek.data);
     } else {
-      cek = await addPegawai(item);
+      cek = await addAbsensi(item);
       setPesan(cek.data);
       console.log(cek);
     }
     if (cek.status === "berhasil") {
-      setName("");
+      setPresence("Hadir");
     }
   };
   return (
     <>
-      <motion.div
+      <div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -101,102 +100,54 @@ const From = ({ closeModal, dataEdit, cekEdit, setPesan }) => {
                 Silahkan menambah data pegawai
               </h3>
               <form className="space-y-3" onSubmit={handleSimpan}>
-                {/* NIP */}
-                <div>
-                  <label
-                    htmlFor="NIP"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    NIP
-                  </label>
-                  <Input
-                    id="NIP"
-                    type="text"
-                    value={NIP}
-                    onChange={(e) => {
-                      setNIP(e.target.value);
-                    }}
-                    required
-                  />
-                </div>
-                {/* Name */}
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Nama Pegawai
-                  </label>
-                  <Input
-                    id="name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                    }}
-                    required
-                  />
-                </div>
-                {/* Jabatan */}
+                {/* Tgl Absen */}
                 <div>
                   <label
                     htmlFor="jabatan"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Jabatan
+                    Tgl. Absen
+                  </label>
+                  <DatePickComp selected={date} onChange={setDate} />
+                </div>
+                {/* Pilih Pegawai */}
+                <div>
+                  <label
+                    htmlFor="NIP"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Plih Pegawai
                   </label>
                   <SelectSearch
-                    value={position_id}
-                    onChange={setPositionId}
+                    value={employee}
+                    onChange={setEmployee}
                     options={options}
                     id="jabatan"
                     required
                   />
                 </div>
-                {/* Gender */}
+                {/* Pilih Kehadiran */}
                 <div>
                   <label
-                    htmlFor="name"
+                    htmlFor="kehadiran"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Jenis Kelamin
+                    Kehadiran
                   </label>
-                  <div className="flex">
-                    <div className="flex items-center mr-4">
-                      <input
-                        id="inline-radio"
-                        type="radio"
-                        value="Laki-laki"
-                        checked={gender === "Laki-laki"}
-                        onChange={(e) => setGender(e.target.value)}
-                        name="gender"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        htmlFor="inline-radio"
-                        className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Laki-laki
-                      </label>
-                    </div>
-                    <div className="flex items-center mr-4">
-                      <input
-                        id="inline-2-radio"
-                        type="radio"
-                        value="Perempuan"
-                        checked={gender === "Perempuan"}
-                        onChange={(e) => setGender(e.target.value)}
-                        name="gender"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        htmlFor="inline-2-radio"
-                        className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Perempuan
-                      </label>
-                    </div>
-                  </div>
+                  {presence && (
+                    <SelectComp
+                      defaultValue={presence}
+                      id="kehadiran"
+                      onChange={(e) => {
+                        setPresence(e.target.value);
+                      }}
+                    >
+                      <option value="Hadir">Hadir</option>
+                      <option value="Izin">Izin</option>
+                      <option value="Sakit">Sakit</option>
+                      <option value="Tanpa Keterangan">Tanpa Keterangan</option>
+                    </SelectComp>
+                  )}
                 </div>
 
                 <div className="flex gap-2">
@@ -218,7 +169,7 @@ const From = ({ closeModal, dataEdit, cekEdit, setPesan }) => {
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </>
   );
 };

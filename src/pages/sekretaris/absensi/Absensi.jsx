@@ -6,21 +6,25 @@ import Paginate from "../../../components/sekretaris/paginate/Paginate";
 import Table from "../../../components/sekretaris/table/Table";
 import useAbsensi from "../../../store/absensi";
 import From from "./From";
-import { motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
 import DatePickComp from "../../../components/sekretaris/form/DatePickComp";
+import moment from "moment";
 
 const Absensi = () => {
-  const { arrData, responses, setAbsensi, removeAbsensi } = useAbsensi();
+  const { arrData, responses, setAbsensi, removeAbsensi, getAbsensi } =
+    useAbsensi();
   const [openModal, setOpenModal] = useState(false);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
 
   const [dataEdit, setDataEdit] = useState({});
   const [cekEdit, setCekEdit] = useState(true);
+  // date Filter
+  const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
-    setAbsensi("", page, limit);
+    const myDate = moment(startDate).format("YYYY-MM-DD");
+    setAbsensi(myDate, page, limit);
   }, [page, limit]);
 
   const setPesan = (event) => {
@@ -80,16 +84,24 @@ const Absensi = () => {
     });
   };
 
-  const handleSearch = (e) => {
-    const search = e.target.value;
-    setAbsensi(search, page, limit);
+  const dateFilter = (date) => {
+    const myDate = moment(date).format("YYYY-MM-DD");
+    setStartDate(date);
+    setPage(1);
+    setLimit(10);
+    setAbsensi(myDate, page, limit);
   };
 
-  const headers = ["No", "NIP", "Nama", "Jabatan", "Jenis Kelamin", "Aksi"];
-  const tableBodies = [`NIP`, `name`, `position.name`, `gender`];
+  // export excel
+  const xport = async () => {
+    console.log("print");
+  };
+
+  const headers = ["No", "NIP", "Nama", "Kehadiran", "Aksi"];
+  const tableBodies = [`employee.NIP`, `employee.name`, `presence`];
 
   return (
-    <motion.div
+    <div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -116,7 +128,21 @@ const Absensi = () => {
       <div className="flex justify-between gap-3 flex-wrap md:flex-nowrap">
         <div className="w-full">
           {/* <Search ket="Cari Data Absensi" findData={handleSearch} /> */}
-          <DatePickComp />
+          <DatePickComp
+            selected={startDate}
+            onChange={dateFilter}
+            dateFormat="dd MMMM yyyy"
+          />
+        </div>
+        <div>
+          <button
+            onClick={xport}
+            className="w-36 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
+          >
+            <span className="w-36 relative px-5 py-2 ransition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+              Export Excel
+            </span>
+          </button>
         </div>
         <div>
           <select
@@ -135,6 +161,7 @@ const Absensi = () => {
 
       <div className="mt-2">
         <Table
+          id="absensi"
           headers={headers}
           dataTable={arrData}
           tableBodies={tableBodies}
@@ -159,7 +186,7 @@ const Absensi = () => {
           />
         )}
       </div>
-    </motion.div>
+    </div>
   );
 };
 

@@ -10,7 +10,7 @@ const useAbsensi = create(
   devtools((set, get) => ({
     responses: {},
     arrData: [],
-    setAbsensi: async (search = "", page = "1", limit) => {
+    setAbsensi: async (date = "", page = "1", limit) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {
         const response = await crud({
@@ -19,16 +19,39 @@ const useAbsensi = create(
           headers: { Authorization: `Bearer ${getToken}` },
           params: {
             limit,
-            search,
+            date,
             page,
           },
         });
         set((state) => ({ ...state, responses: response.data }));
         set((state) => ({ ...state, arrData: response.data.data }));
-        console.log(response.data.data);
         return {
           status: "berhasil",
           data: response.data,
+        };
+      } catch (error) {
+        return {
+          status: "error",
+          error: error.response.data,
+        };
+      }
+    },
+    getAbsensi: async (date = "", page = "1", limit) => {
+      const getToken = JSON.parse(localStorage.getItem("token"));
+      try {
+        const response = await crud({
+          method: "get",
+          url: `/attedance`,
+          headers: { Authorization: `Bearer ${getToken}` },
+          params: {
+            limit,
+            date,
+            page,
+          },
+        });
+        return {
+          status: "berhasil",
+          data: response.data.data,
         };
       } catch (error) {
         return {
