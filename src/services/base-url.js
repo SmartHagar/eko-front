@@ -6,6 +6,7 @@ const BASE_URL = "http://127.0.0.1:8000";
 const url_auth = `${BASE_URL}/auth`;
 const url_api = `${BASE_URL}/api`;
 const url_crud = `${BASE_URL}/crud`;
+const url_laporan = `${BASE_URL}/laporan`;
 
 // export { BASE_URL, url_api, url_auth, url_crud };
 
@@ -28,4 +29,11 @@ export function GetCrud() {
     baseURL: url_crud,
   });
   return { crud };
+}
+
+export function GetLaporan() {
+  const laporan = axios.create({
+    baseURL: url_laporan,
+  });
+  return { laporan };
 }

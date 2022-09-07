@@ -16,6 +16,7 @@ import Pegawai from "../pages/sekretaris/pegawai/Pegawai";
 import useRole from "../store/role";
 import NoMatch from "../pages/sekretaris/NoMatch";
 import { AnimatePresence } from "framer-motion";
+import LapAbsensi from "../pages/sekretaris/laporan/LapAbsensi";
 
 const MyRouters = () => {
   const navigate = useNavigate();
@@ -51,6 +52,7 @@ const MyRouters = () => {
           <Route path="jabatan" element={<Jabatan />} />
           <Route path="pegawai" element={<Pegawai />} />
           <Route path="absensi" element={<Absensi />} />
+          <Route path="lap-absensi" element={<LapAbsensi />} />
         </Route>
       </Routes>
     </AnimatePresence>

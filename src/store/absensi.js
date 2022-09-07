@@ -36,30 +36,6 @@ const useAbsensi = create(
         };
       }
     },
-    getAbsensi: async (date = "", page = "1", limit) => {
-      const getToken = JSON.parse(localStorage.getItem("token"));
-      try {
-        const response = await crud({
-          method: "get",
-          url: `/attedance`,
-          headers: { Authorization: `Bearer ${getToken}` },
-          params: {
-            limit,
-            date,
-            page,
-          },
-        });
-        return {
-          status: "berhasil",
-          data: response.data.data,
-        };
-      } catch (error) {
-        return {
-          status: "error",
-          error: error.response.data,
-        };
-      }
-    },
     addAbsensi: async (item) => {
       const getToken = JSON.parse(localStorage.getItem("token"));
       try {

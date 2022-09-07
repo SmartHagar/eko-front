@@ -9,10 +9,11 @@ import From from "./From";
 import toast, { Toaster } from "react-hot-toast";
 import DatePickComp from "../../../components/sekretaris/form/DatePickComp";
 import moment from "moment";
+import useLapKehadiran from "../../../store/laporan/lap-kehadiran";
 
 const Absensi = () => {
-  const { arrData, responses, setAbsensi, removeAbsensi, getAbsensi } =
-    useAbsensi();
+  const { arrData, responses, setAbsensi, removeAbsensi } = useAbsensi();
+  const { setExcelHarian } = useLapKehadiran();
   const [openModal, setOpenModal] = useState(false);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -94,7 +95,9 @@ const Absensi = () => {
 
   // export excel
   const xport = async () => {
-    console.log("print");
+    const myDate = moment(startDate).format("YYYY-MM-DD");
+    const cek = await setExcelHarian(myDate);
+    console.log(cek);
   };
 
   const headers = ["No", "NIP", "Nama", "Kehadiran", "Aksi"];

@@ -15,7 +15,7 @@ const Paginate = ({ pageData, setPage, total }) => {
         <Pagination
           innerClass="inline-flex items-center -space-x-px"
           activePage={current_page}
-          itemsCountPerPage={per_page}
+          itemsCountPerPage={parseInt(per_page)}
           totalItemsCount={total}
           pageRangeDisplayed={5}
           itemClass=""
