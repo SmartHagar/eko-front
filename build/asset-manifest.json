@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.42400810.css",
+    "main.js": "/static/js/main.e4dcfadf.js",
+    "static/media/bg-img-3.jpg": "/static/media/bg-img-3.7b6484bdb2ec7c892aa7.jpg",
+    "static/media/Judson-Regular.ttf": "/static/media/Judson-Regular.e528cdf241c7c3ab19e4.ttf",
+    "static/media/Jost-VariableFont_wght.ttf": "/static/media/Jost-VariableFont_wght.6de07354a7108bacf175.ttf",
+    "index.html": "/index.html",
+    "main.42400810.css.map": "/static/css/main.42400810.css.map",
+    "main.e4dcfadf.js.map": "/static/js/main.e4dcfadf.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.42400810.css",
+    "static/js/main.e4dcfadf.js"
+  ]
+}
