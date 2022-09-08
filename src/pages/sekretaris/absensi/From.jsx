@@ -8,10 +8,10 @@ import SelectComp from "../../../components/sekretaris/form/SelectComp";
 import DatePickComp from "../../../components/sekretaris/form/DatePickComp";
 import moment from "moment";
 
-const From = ({ closeModal, dataEdit, cekEdit, setPesan }) => {
+const From = ({ closeModal, dataEdit, cekEdit, setPesan, startDate }) => {
   const { arrData, setPegawai } = usePegawai();
   const { addAbsensi, updateAbsensi } = useAbsensi();
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(startDate);
   const [presence, setPresence] = useState("");
   const [employee, setEmployee] = useState("");
 
@@ -35,7 +35,10 @@ const From = ({ closeModal, dataEdit, cekEdit, setPesan }) => {
   }, []);
 
   const options = arrData.map(function (pegawai) {
-    return { value: pegawai.id, label: `${pegawai.NIP} - ${pegawai.name}` };
+    return {
+      value: pegawai.id,
+      label: `${pegawai.NIP ? pegawai.NIP : ""} - ${pegawai.name}`,
+    };
   });
 
   const handleClose = () => {
@@ -61,7 +64,6 @@ const From = ({ closeModal, dataEdit, cekEdit, setPesan }) => {
       console.log(cek);
     }
     if (cek.status === "berhasil") {
-      setPresence("Hadir");
     }
   };
   return (
@@ -108,7 +110,11 @@ const From = ({ closeModal, dataEdit, cekEdit, setPesan }) => {
                   >
                     Tgl. Absen
                   </label>
-                  <DatePickComp selected={date} onChange={setDate} />
+                  <DatePickComp
+                    selected={date}
+                    onChange={setDate}
+                    dateFormat="dd MMMM yyyy"
+                  />
                 </div>
                 {/* Pilih Pegawai */}
                 <div>

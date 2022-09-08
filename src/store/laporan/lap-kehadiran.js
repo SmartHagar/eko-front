@@ -47,6 +47,41 @@ const useLapKehadiran = create(
         };
       }
     },
+    setExcelBulanan: async (bulan, tahun) => {
+      const getToken = JSON.parse(localStorage.getItem("token"));
+      try {
+        const response = await laporan({
+          method: "get",
+          url: `/excel/attedance-bulanan`,
+          responseType: "arraybuffer",
+          headers: { Authorization: `Bearer ${getToken}` },
+          params: {
+            bulan,
+            tahun,
+          },
+        });
+
+        let blob = new Blob([response.data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        // url = window.URL.createObjectURL(blob);
+
+        let link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `Absen ${bulan}-${tahun}.xlsx`;
+        link.click();
+
+        return {
+          status: "berhasil",
+          data: response.data,
+        };
+      } catch (error) {
+        return {
+          status: "error",
+          error: error.response.data,
+        };
+      }
+    },
   }))
 );
 

@@ -15,7 +15,7 @@ const getProperty = (obj, prop) => {
     }
 
     if (typeof obj === "object") {
-      return obj[last];
+      return obj ? obj[last] : "";
     }
     return obj;
   } else {

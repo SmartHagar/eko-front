@@ -186,6 +186,7 @@ const Absensi = () => {
             dataEdit={dataEdit}
             cekEdit={cekEdit}
             setPesan={setPesan}
+            startDate={startDate}
           />
         )}
       </div>

@@ -64,6 +64,7 @@ const From = ({ closeModal, dataEdit, cekEdit, setPesan, sendSave }) => {
     if (cek.status === "berhasil") {
       sendSave(cek.data);
       setName("");
+      setNIP("");
     }
   };
   return (
@@ -117,7 +118,6 @@ const From = ({ closeModal, dataEdit, cekEdit, setPesan, sendSave }) => {
                     onChange={(e) => {
                       setNIP(e.target.value);
                     }}
-                    required
                   />
                 </div>
                 {/* Name */}
